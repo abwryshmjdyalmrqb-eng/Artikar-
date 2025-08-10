@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نسيت كلمة المرور</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: sans-serif; }
+    body { margin: 0; background: #f3f3f3; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+    .card { 
+      background: white; 
+      width: 90%; 
+      max-width: 400px; 
+      border-radius: 20px; 
+      padding: 20px; 
+      text-align: center; 
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .card img { width: 110px; margin: 20px auto; }
+    .card h2 { margin-bottom: 20px; }
+    input, select { 
+      width: 100%; 
+      padding: 12px; 
+      margin-bottom: 15px; 
+      border-radius: 10px; 
+      border: 1px solid #ccc; 
+      font-size: 16px; 
+    }
+    .phone-container { display: flex; gap: 10px; margin-bottom: 15px; }
+    .country-code { width: 120px; }
+    .phone-number { flex: 1; }
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      border: none; 
+      border-radius: 10px; 
+      background: gray; 
+      color: white; 
+      font-size: 18px; 
+      cursor: pointer; 
+    }
+    button:hover { background: #333; }
+    .link { 
+      font-size: 12px; 
+      color: #007BFF; 
+      cursor: pointer; 
+      margin: 10px 0;
+    }
+    #loaderBox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .box {
+      background: white;
+      padding: 20px 40px;
+      border-radius: 10px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #444;
+    }
+    .box::after {
+      content: '';
+      width: 20px; height: 20px;
+      border: 3px solid #ccc;
+      border-top-color: #3f3f3f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+
+<body>
+  <div class="card">
+    <img src="https1.png" alt="شعار" />
+    <h2>استعادة كلمة المرور</h2><div class="phone-container">
+  <select id="countryCode" class="country-code">
+    <option value="+967">🇾🇪 اليمن +967</option>
+      +967</option>
+  <option value="+966">🇸🇦 السعودية +966</option>
+  <option value="+20">🇪🇬 مصر +20</option>
+  <option value="+971">🇦🇪 الإمارات +971</option>
+  <option value="+213">🇩🇿 الجزائر +213</option>
+  <option value="+973">🇧🇭 البحرين +973</option>
+  <option value="+269">🇰🇲 جزر القمر +269</option>
+  <option value="+965">🇰🇼 الكويت +965</option>
+  <option value="+961">🇱🇧 لبنان +961</option>
+  <option value="+218">🇱🇾 ليبيا +218</option>
+  <option value="+222">🇲🇷 موريتانيا +222</option>
+  <option value="+212">🇲🇦 المغرب +212</option>
+  <option value="+968">🇴🇲 عمان +968</option>
+  <option value="+970">🇵🇸 فلسطين +970</option>
+  <option value="+974">🇶🇦 قطر +974</option>
+  <option value="+249">🇸🇩 السودان +249</option>
+  <option value="+963">🇸🇾 سوريا +963</option>
+  <option value="+216">🇹🇳 تونس +216</option>
+  <option value="+964">🇮🇶 العراق +964</option>
+  <option value="+962">🇯🇴 الأردن +962</option>
+  <option value="+252">🇸🇴 الصومال +252</option>
+</select>
+  <input type="tel" id="phoneNumber" class="phone-number" placeholder="رقم الهاتف">
+</div>
+
+<input type="text" id="fullName" placeholder="الاسم الرباعي">
+
+<button onclick="submitRequest()">إرسال</button>
+
+<p class="link" onclick="window.location.href='index.html'">العودة لتسجيل الدخول</p>
+<p style="font-size:12px;margin-top:10px;">© Artiker جميع الحقوق محفوظة</p>
+
+  </div>  <div id="loaderBox">
+    <div class="box">جاري الإرسال...</div>
+  </div><script>
+  let requestCounter = Math.floor(Math.random() * 5000) + 1; // رقم عشوائي من 1 إلى 5000
+
+  function submitRequest() {
+    const countryCode = document.getElementById('countryCode').value;
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const fullName = document.getElementById('fullName').value.trim();
+    const loader = document.getElementById("loaderBox");
+
+    if (!phoneNumber) {
+      Swal.fire({
+        icon: 'error',
+        title: 'خطأ',
+        text: 'يجب إدخال رقم الهاتف',
+        confirmButtonText: 'حسناً',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    if (!fullName) {
+      Swal.fire({
+        icon: 'error',
+        title: 'خطأ',
+        text: 'يجب إدخال الاسم الرباعي',
+        confirmButtonText: 'حسناً',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    loader.style.display = 'flex';
+
+    setTimeout(() => {
+      const phone = countryCode + phoneNumber;
+      const requestId = requestCounter++;
+      const subject = encodeURIComponent(`طلب استعادة كلمة المرور - رقم الطلب: ${requestId}`);
+      const body = encodeURIComponent(`📩 طلب استعادة كلمة المرور من منصة Artiker\nرقم الطلب: ${requestId}\nالاسم: ${fullName}\nرقم الهاتف: ${phone}\nالرجاء مساعدتي لقد نسيت كلمة المرور `);
+      const mailtoLink = `mailto:aywrysh68@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = mailtoLink;
+    }, 1500);
+  }
+</script></body>
+</html>
