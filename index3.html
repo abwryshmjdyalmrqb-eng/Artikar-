@@ -1,0 +1,67 @@
+<!-- ARX Robots Section -->
+
+
+  <link rel="stylesheet" href="mm.css">
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<section id="arx-robots" dir="rtl" class="arx-root">
+  
+  
+  
+  <!-- هيدر أنيق -->
+  <header class="arx-header">
+    <div class="arx-header__title">
+      <span class="arx-logo">Artiker</span>
+      <span class="arx-sub">روبوتات الذكاء الاصطناعي – عقود استثمارية</span>
+    </div>
+    <div class="arx-header__id" id="arxUserId">ID: user_xxxxx</div>
+  </header>
+  
+  <!-- تبويب بسيط (اختياري) -->
+  <nav class="arx-tabs" aria-label="robot filters">
+    <button class="arx-tab arx-tab--active" data-filter="all">الكل</button>
+    <button class="arx-tab" data-filter="low">مبتدئ</button>
+    <button class="arx-tab" data-filter="mid">متوسط</button>
+    <button class="arx-tab" data-filter="high">محترف</button>
+  </nav>
+  
+  <!-- قائمة الروبوتات -->
+  <div class="arx-list" id="arxList">
+    <!-- العنصر يُولَّد ديناميكياً من JS بناءً على البيانات -->
+  </div>
+  
+  <!-- مودال الاشتراك -->
+  <div class="arx-modal" id="arxModal" aria-hidden="true">
+    <div class="arx-modal__box" role="dialog" aria-modal="true" aria-labelledby="arxModalTitle">
+      <button class="arx-modal__close" id="arxClose">&times;</button>
+      <div class="arx-modal__icon">🤖</div>
+      <h3 id="arxModalTitle" class="arx-modal__title">الاشتراك في روبوت</h3>
+      <p class="arx-modal__text" id="arxModalText">
+        يجب عليك الاشتراك في برنامج روبوت الذكاء الاصطناعي والموافقة على عقد الشروط قبل التفعيل.
+      </p>
+      
+      <div class="arx-agreement">
+        <label class="arx-check">
+          <input type="checkbox" id="arxAgree">
+          <span>أوافق على <a href="#" class="arx-link">الشروط والأحكام</a> وأتحمل مخاطر السوق</span>
+        </label>
+        <label class="arx-input">
+          <span>التوقيع (الاسم الكامل)</span>
+          <input type="text" id="arxSigner" placeholder="اكتب اسمك الكامل">
+        </label>
+      </div>
+      
+      <div class="arx-modal__actions">
+        <a class="arx-btn arx-btn--ghost" href="https://t.me/artikarbot" target="_blank" rel="noopener">التواصل مع @artikarbot</a>
+        <button class="arx-btn arx-btn--primary" id="arxConfirm" disabled>تأكيد الاشتراك</button>
+      </div>
+      
+      <div class="arx-note" id="arxNote"></div>
+    </div>
+  </div>
+    <script src="index6.js"></script>
+  
+  
+</section>

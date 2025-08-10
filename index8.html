@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سحب الأرباح</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #9d50bb;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #6e48aa;
+        }
+        .balance-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .wallet-card {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .wallet-card img {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+        .wallet-card.active {
+            border-color: #6e48aa;
+            background-color: #f0fff4;
+        }
+        .wallet-info {
+            flex-grow: 1;
+        }
+        .wallet-name {
+            font-weight: bold;
+        }
+        .wallet-address {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+        .error-message {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        
+        
+        .circle-loader {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #9d50bb;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 
+        
+        
+        
+        
+    </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+    <div class="container">
+        <h1>سحب الأرباح</h1>
+        
+        <div class="balance-info">
+            <div>رصيدك المتاح للسحب</div>
+          <div class="balance-amount">
+  <span class="loader-wrapper">
+    <span class="circle-loader" id="balanceLoader"></span>
+  </span>
+  <span id="availableBalance"></span>
+</div>
+            <div class="error-message" id="balanceError">رصيدك غير كافي لسحب هذا المبلغ</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="walletSelect">اختر المحفظة للسحب إليها:</label>
+            <div id="walletsContainer">
+                <!-- سيتم ملؤها بالجافاسكريبت -->
+            </div>
+            <div class="error-message" id="walletError">الرجاء اختيار محفظة للسحب إليها</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="amount">المبلغ المطلوب سحبه:</label>
+            <input type="number" id="amount" placeholder="أدخل المبلغ" min="1">
+            <div class="error-message" id="amountError">الرجاء إدخال مبلغ صحيح</div>
+        </div>
+        
+        <button id="withdrawBtn">طلب السحب</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    // إعدادات Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+        authDomain: "trading-4b0aa.firebaseapp.com",
+        databaseURL: "https://trading-4b0aa-default-rtdb.firebaseio.com",
+        projectId: "trading-4b0aa",
+        storageBucket: "trading-4b0aa.appspot.com",
+        messagingSenderId: "738549332722",
+        appId: "1:738549332722:web:6e407e8312dd0600842e6b",
+        measurementId: "G-4MMPM6LMN4"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // جلب بيانات المستخدم
+    const storedUser = localStorage.getItem('loggedInUser');
+    if (!storedUser) {
+        window.location.href = 'index.html';
+    }
+    
+    const userData = JSON.parse(storedUser);
+    const userId = userData.userId;
+    
+    // عناصر DOM
+    const availableBalanceEl = document.getElementById('availableBalance');
+    const walletsContainer = document.getElementById('walletsContainer');
+    const amountInput = document.getElementById('amount');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const walletErrorEl = document.getElementById('walletError');
+    const amountErrorEl = document.getElementById('amountError');
+    const balanceErrorEl = document.getElementById('balanceError');
+    
+    // بيانات المحافظ
+    const walletImages = {
+        'binance': 'https://cryptologos.cc/logos/bnb-bnb-logo.png',
+        'payeer': 'https://payeer.com/favicon.ico',
+        'perfectmoney': 'https://perfectmoney.is/img/logo30.png'
+    };
+    
+    const walletNames = {
+        'binance': 'باينانس',
+        'payeer': 'بايير',
+        'perfectmoney': 'بافكت ماني'
+    };
+    
+    // متغيرات التطبيق
+    let availableBalance = 0;
+    let selectedWallet = null;
+    let userWallets = [];
+    
+    // تحميل بيانات المستخدم والمحافظ
+    function loadUserData() {
+        // جلب رصيد المستخدم
+        database.ref(`users/${userId}`).on('value', (snapshot) => {
+            const data = snapshot.val();
+            availableBalance = parseFloat(data.totalProfit) || 0;
+            availableBalanceEl.textContent = availableBalance.toFixed(2);
+            
+            document.getElementById('balanceLoader').style.display = 'none';
+        });
+        
+        // جلب محافظ المستخدم
+        database.ref(`users/${userId}/wallets`).on('value', (snapshot) => {
+            walletsContainer.innerHTML = '';
+            userWallets = [];
+            
+            const wallets = snapshot.val() || {};
+            if (Object.keys(wallets).length === 0) {
+                walletsContainer.innerHTML = '<p>لا توجد محافظ مربوطة. الرجاء إضافة محفظة أولاً.</p>';
+                return;
+            }
+            
+            for (const [walletId, wallet] of Object.entries(wallets)) {
+                userWallets.push({
+                    id: walletId,
+                    ...wallet
+                });
+                
+                const walletCard = document.createElement('div');
+                walletCard.className = 'wallet-card';
+                walletCard.dataset.walletId = walletId;
+                
+                walletCard.innerHTML = `
+                    <img src="${walletImages[wallet.type] || 'https://via.placeholder.com/40'}" alt="${walletNames[wallet.type] || wallet.type}">
+                    <div class="wallet-info">
+                        <div class="wallet-name">${walletNames[wallet.type] || wallet.type} (${wallet.network})</div>
+                        <div class="wallet-address">${wallet.address}</div>
+                    </div>
+                `;
+                
+                walletCard.addEventListener('click', () => {
+                    document.querySelectorAll('.wallet-card').forEach(c => c.classList.remove('active'));
+                    walletCard.classList.add('active');
+                    selectedWallet = walletId;
+                    walletErrorEl.style.display = 'none';
+                });
+                
+                walletsContainer.appendChild(walletCard);
+            }
+        });
+    }
+    
+    // إخفاء جميع رسائل الخطأ
+    function hideAllErrors() {
+        walletErrorEl.style.display = 'none';
+        amountErrorEl.style.display = 'none';
+        balanceErrorEl.style.display = 'none';
+    }
+    
+    // معالجة طلب السحب
+    withdrawBtn.addEventListener('click', () => {
+        hideAllErrors();
+        
+        const amount = parseFloat(amountInput.value);
+        let isValid = true;
+        
+        // التحقق من المدخلات
+        if (!selectedWallet) {
+            walletErrorEl.style.display = 'block';
+            isValid = false;
+        }
+        
+        if (isNaN(amount) || amount <= 0) {
+            amountErrorEl.style.display = 'block';
+            isValid = false;
+        }
+        
+        if (amount > availableBalance) {
+            balanceErrorEl.style.display = 'block';
+            isValid = false;
+        }
+        
+        if (!isValid) return;
+        
+        // تأكيد عملية السحب
+        Swal.fire({
+            title: 'تأكيد السحب',
+            html: `
+                <p>هل أنت متأكد من سحب <strong>${amount.toFixed(2)}</strong> إلى محفظتك؟</p>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'نعم، تأكيد السحب',
+            cancelButtonText: 'إلغاء',
+            customClass: {
+                confirmButton: 'confirm-withdraw-btn'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                processWithdrawal(amount);
+            }
+        });
+    });
+    
+    // معالجة السحب في قاعدة البيانات
+    function processWithdrawal(amount) {
+        const withdrawalRef = database.ref(`withdrawals`).push();
+        const wallet = userWallets.find(w => w.id === selectedWallet);
+        
+        const withdrawalData = {
+            userId: userId,
+            walletId: selectedWallet,
+            walletType: wallet.type,
+            walletNetwork: wallet.network,
+            walletAddress: wallet.address,
+            amount: amount,
+            status: 'pending',
+            date: new Date().toISOString()
+        };
+        
+        // إضافة طلب السحب
+        withdrawalRef.set(withdrawalData)
+            .then(() => {
+                // تحديث رصيد المستخدم
+                const newBalance = availableBalance - amount;
+                const updates = {};
+                updates[`users/${userId}/totalProfit`] = newBalance;
+                
+                // إضافة إلى سجل السحوبات
+                updates[`users/${userId}/withdrawals/${withdrawalRef.key}`] = {
+                    amount: amount,
+                    date: new Date().toISOString(),
+                    status: 'pending'
+                };
+                
+                return database.ref().update(updates);
+            })
+            .then(() => {
+                Swal.fire({
+                    title: 'تمت العملية بنجاح',
+                    html: `
+                        <p>تم إرسال طلب السحب بنجاح</p>
+                        <p>سيتم إيداع المبلغ إلى حسابك خلال 24 ساعة</p>
+                    `,
+                    icon: 'success',
+                    confirmButtonText: 'حسناً'
+                });
+                
+                // إعادة تعيين الحقول
+                amountInput.value = '';
+                document.querySelectorAll('.wallet-card').forEach(c => c.classList.remove('active'));
+                selectedWallet = null;
+            })
+            .catch((error) => {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء معالجة طلب السحب',
+                    icon: 'error',
+                    confirmButtonText: 'حسناً'
+                });
+                console.error('Withdrawal error:', error);
+            });
+    }
+    
+    // التحقق من المبلغ عند تغييره
+    amountInput.addEventListener('input', () => {
+        const amount = parseFloat(amountInput.value);
+        if (!isNaN(amount) && amount > availableBalance) {
+            balanceErrorEl.style.display = 'block';
+        } else {
+            balanceErrorEl.style.display = 'none';
+        }
+    });
+    
+    // تهيئة الصفحة
+    loadUserData();
+    </script>
+</body>
+</html>

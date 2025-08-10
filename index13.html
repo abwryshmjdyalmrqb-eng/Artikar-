@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مستويات VIP | Artiker</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#160b23; --bg2:#1f1231;
+    --glass:#0f0a19; --text:#eae6ff; --muted:#b7aee0;
+    --accent:#9d50bb; --accent2:#6e8efb; --ok:#2bd09f; --err:#ff6b6b;
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,Tahoma,Arial;color:var(--text);
+    background: radial-gradient(1100px 550px at 50% -180px,var(--bg2),var(--bg1));
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:20px 14px 32px}
+  /* Hero */
+  .hero{
+    position:relative;border-radius:26px;padding:24px 18px;overflow:hidden;
+    background:linear-gradient(135deg, rgba(158,80,187,.18), rgba(110,142,251,.18));
+    box-shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:-2px;border-radius:28px;
+    background:conic-gradient(from 0deg, var(--accent), var(--accent2), #7ee0ff, var(--accent));
+    filter:blur(18px);opacity:.55;animation:spin 6s linear infinite;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;padding:2px;
+  }
+  @keyframes spin{to{transform:rotate(1turn)}}
+  .hero h1{margin:0 0 8px;font-size:26px;color:#fff}
+  .hero p{margin:0 0 10px;color:#efe9ff}
+  .metrics{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .pill{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+    padding:8px 12px;border-radius:999px;font-size:14px;color:#fff
+  }
+  /* Grid */
+  .grid{display:grid;gap:16px;margin-top:18px}
+  @media(min-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  /* Card */
+  .card{
+    position:relative;border-radius:var(--radius);padding:16px;background:var(--glass);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden;border:1px solid rgba(255,255,255,.06)
+  }
+  /* تمويج إلكتروني */
+  .card::after{
+    content:"";position:absolute;inset:-30% -10%;transform:skewY(-12deg);
+    background:linear-gradient(90deg, rgba(158,80,187,.25), rgba(110,142,251,.20), rgba(126,224,255,.18));
+    filter:blur(22px);animation:float 8s ease-in-out infinite alternate;pointer-events:none;
+  }
+  @keyframes float { from { transform: translateY(-8px) skewY(-12deg); } to { transform: translateY(8px) skewY(-12deg); } }
+
+  .row{position:relative;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .vip-badge{
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;padding:7px 12px;border-radius:999px;font-weight:700;letter-spacing:.4px
+  }
+  .small{font-size:13px;color:var(--muted)}
+  .lock{display:inline-flex;align-items:center;gap:6px;color:#9a90c9}
+  .state{font-size:13px} .state.ok{color:var(--ok)} .state.err{color:var(--err)}
+
+  .progress{height:12px;border-radius:12px;background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.1);overflow:hidden}
+  .progress>span{
+    display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 0 18px rgba(110,142,251,.65) inset
+  }
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border:none;border-radius:14px;
+    cursor:pointer;font-weight:700;text-decoration:none;transition:.2s}
+  .btn-grad{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .btn-grad:hover{filter:brightness(1.08)}
+  .btn-soft{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.18)}
+  .btn-soft:hover{background:rgba(255,255,255,.13)}
+  .note{font-size:13px;color:#cfc7ff;margin-top:6px}
+  .loading{margin:18px 0;font-size:14px;opacity:.9}
+  
+  
+  
+  /* === Wave FX Patch for .card (لا تلمس غيره) === */
+:root{
+  /* تقدر تغيّر الألوان لو حبيت */
+  --fx-accent-1: #9d50bb;   /* بنفسجي */
+  --fx-accent-2: #6e8efb;   /* أزرق */
+  --fx-accent-3: #7ee0ff;   /* سماوي */
+  --fx-glow: rgba(110,142,251,.65);
+}
+
+/* لازم يكون للكرت سياق تموضع ويقص الحواف */
+.card{
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;            /* يمنع تداخل المؤثرات مع الخارج */
+  border-radius: inherit;        /* يحافظ على نفس الانحناء */
+}
+
+/* محتوى البطاقة يكون فوق التمويج */
+.card > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* تمويج إلكتروني متحرك داخل الكرت */
+.card::after{
+  content: "";
+  position: absolute;
+  inset: -30% -10%;
+  transform: skewY(-12deg);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--fx-accent-1) 70%, transparent),
+    color-mix(in srgb, var(--fx-accent-2) 55%, transparent),
+    color-mix(in srgb, var(--fx-accent-3) 50%, transparent)
+  );
+  filter: blur(22px);
+  animation: cardFloat 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* لمعان إطار خفيف حول البطاقة */
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 180deg,
+    var(--fx-accent-3),
+    var(--fx-accent-2),
+    var(--fx-accent-1),
+    #ffe27e,
+    var(--fx-accent-3)
+  );
+  opacity: .28;
+  filter: blur(14px);
+  padding: 2px;
+  z-index: 0;
+  /* قص اللمعة كي لا تغطي المحتوى */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* شريط التقدّم ياخذ توهّج بسيط (اختياري) */
+.progress > span{
+  box-shadow: 0 0 18px var(--fx-glow) inset;
+}
+
+/* حركة التمويج */
+@keyframes cardFloat {
+  from { transform: translateY(-8px) skewY(-12deg); }
+  to   { transform: translateY(8px)  skewY(-12deg); }
+}
+  
+  
+
+  
+  
+  
+</style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>مستويات VIP</h1>
+      <p>افتح المستويات بزيادة <b>مبلغ الصفقة</b>، واستلم مكافآت الترقية تلقائيًا.</p>
+      <div class="metrics">
+        <div class="pill">إجمالي الأرباح: <b id="totalProfit">—</b> $</div>
+        <div class="pill">مبلغ الصفقة: <b id="dealAmount">—</b> $</div>
+        <div class="pill">مستواك الحالي: <b id="currentLevel">—</b></div>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">جاري التحميل...</div>
+    <div class="grid" id="levelsGrid"></div>
+    <div class="note" id="sysNote"></div>
+  </div>
+
+  <!-- Firebase compat (v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+
+  <script>
+  /* ---------------- Firebase ---------------- */
+  const firebaseConfig = {
+    apiKey:"AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+    authDomain:"trading-4b0aa.firebaseapp.com",
+    databaseURL:"https://trading-4b0aa-default-rtdb.firebaseio.com",
+    projectId:"trading-4b0aa",
+    storageBucket:"trading-4b0aa.appspot.com",
+    messagingSenderId:"738549332722",
+    appId:"1:738549332722:web:6e407e8312dd0600842e6b",
+    measurementId:"G-4MMPM6LMN4"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  /* ------------- Helpers / Data ------------- */
+  function getUID(){
+    const p = new URLSearchParams(location.search);
+    const u = p.get('uid');
+    if (u && u.trim() !== '') return u;
+    try{
+      return (JSON.parse(localStorage.getItem('loggedInUser')||'{}').userId) || null;
+    }catch{ return null; }
+  }
+
+  const levels = [
+    { name:'VIP1', min:0,     bonus:30  },
+    { name:'VIP2', min:50,    bonus:60  },
+    { name:'VIP3', min:300,   bonus:90  },
+    { name:'VIP4', min:1000,  bonus:120 },
+    { name:'VIP5', min:3000,  bonus:150 },
+    { name:'VIP6', min:10000, bonus:180 },
+    { name:'VIP7', min:30000, bonus:210 }
+  ];
+
+  function lvlFromDeal(deal){
+    if (deal >= 30000) return 'VIP7';
+    if (deal >= 10000) return 'VIP6';
+    if (deal >= 3000)  return 'VIP5';
+    if (deal >= 1000)  return 'VIP4';
+    if (deal >= 300)   return 'VIP3';
+    if (deal >= 50)    return 'VIP2';
+    return 'VIP1';
+  }
+
+  function cardHTML(lvl, deal, bonuses){
+    const opened  = deal >= lvl.min;
+    const claimed = bonuses?.[lvl.name] === true;
+    const next    = Math.max(0, lvl.min - deal);
+    const prog    = (lvl.min===0) ? 100 : Math.max(0, Math.min(100, Math.floor((deal / lvl.min)*100)));
+    return `
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div class="row">
+            <span class="vip-badge">${lvl.name}</span>
+            <span class="small">حد الفتح: ${lvl.min.toLocaleString()}$</span>
+          </div>
+          ${opened ? `<span class="state ok"><span class="material-icons" style="font-size:18px;vertical-align:-3px">verified</span> مفتوح</span>`
+                   : `<span class="lock"><span class="material-icons">lock</span> مقفول</span>`}
+        </div>
+        <div style="margin:12px 0 10px">
+          <div class="progress"><span style="width:${prog}%"></span></div>
+          ${opened ? `<div class="note">تم الوصول إلى الحد الأدنى لهذا المستوى.</div>`
+                   : `<div class="note">متبقٍ: <b>${next.toLocaleString()}$</b> لفتح ${lvl.name}.</div>`}
+        </div>
+        <div class="row" style="justify-content:space-between">
+          <div class="small">مكافأة الترقية: <b>${lvl.bonus}$</b></div>
+          <div class="row">
+            ${opened
+              ? (claimed
+                  ? `<span class="state ok">✅ مُضافة</span>`
+                  : `<button class="btn btn-soft" data-claim="${lvl.name}">
+                       <span class="material-icons">card_giftcard</span> استلام المكافأة
+                     </button>`)
+              : `<a class="btn btn-grad" href="index10.html">
+                   <span class="material-icons">trending_up</span> الترقية الآن
+                 </a>`}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const uid = getUID();
+  const loading = document.getElementById('loading');
+  const grid    = document.getElementById('levelsGrid');
+  const sys     = document.getElementById('sysNote');
+
+  if (!uid){
+    loading.style.display='none';
+    sys.innerHTML = '<span class="state err">لا يوجد مستخدم. افتح الرابط مع ?uid=YOUR_ID أو سجّل دخولك.</span>';
+  } else {
+    start();
+  }
+
+  // معاملة آمنة: تحديث totalProfit فقط + وسم العلم
+  async function claimBonusTx(levelName, amount){
+    const totalRef = db.ref(`users/${uid}/totalProfit`);
+    const flagRef  = db.ref(`users/${uid}/levelBonuses/${levelName}`);
+
+    // لا تكرر
+    const flagSnap = await flagRef.get();
+    if (flagSnap.exists() && flagSnap.val() === true) return false;
+
+    // زيادة إجمالي الأرباح فقط (بدون لمس حقول أخرى)
+    await totalRef.transaction(cur=>{
+      const v = (typeof cur === 'number') ? cur : 0;
+      return +(v + amount).toFixed(2);
+    });
+
+    // وسم العلم
+    await flagRef.set(true);
+
+    // تحديث العرض المحلي
+    const newSnap = await totalRef.get();
+    const newVal  = Number(newSnap.val()) || 0;
+    document.getElementById('totalProfit').textContent = newVal.toFixed(1);
+
+    // لو داخل iframe: حدّث .profit-amount في الصفحة الرئيسية
+    try{
+      const pa = parent?.document?.querySelector?.('.profit-amount');
+      if (pa) pa.textContent = newVal.toFixed(1);
+    }catch{}
+
+    return true;
+  }
+
+  async function start(){
+    try{
+      loading.textContent = 'جاري جلب بياناتك...';
+
+      // قراءة واحدة
+      const snap = await db.ref(`users/${uid}`).get();
+      const data = snap.val() || {};
+      const deal = Number(data.deal) || 0;
+      const totalProfit = Number(data.totalProfit) || 0;
+      const bonuses = data.levelBonuses || {};
+
+      // تحديث العناوين العلوية من القاعدة مباشرة
+      document.getElementById('dealAmount').textContent  = deal.toLocaleString();
+      document.getElementById('totalProfit').textContent = totalProfit.toFixed(1);
+      document.getElementById('currentLevel').textContent = lvlFromDeal(deal);
+
+      // بناء البطاقات
+      grid.innerHTML = levels.map(l => cardHTML(l, deal, bonuses)).join('');
+      loading.style.display='none';
+
+      // ربط أزرار "استلام المكافأة"
+      grid.querySelectorAll('[data-claim]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          const name = btn.getAttribute('data-claim');
+          const lvl  = levels.find(x=>x.name===name);
+          btn.disabled = true;
+          try{
+            const ok = await claimBonusTx(name, lvl.bonus);
+            btn.outerHTML = '<span class="state ok">✅ مُضافة</span>';
+          }catch(e){
+            btn.disabled = false;
+            sys.innerHTML = '<span class="state err">تعذّر صرف المكافأة. تحقق من صلاحيات القاعدة.</span>';
+            console.error(e);
+          }
+        });
+      });
+    }catch(err){
+      loading.style.display='none';
+      sys.innerHTML = `<span class="state err">خطأ: ${err.message||err}</span>`;
+      console.error(err);
+    }
+  }
+  </script>
+</body>
+</html>

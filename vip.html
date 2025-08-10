@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VIP Badge</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  :root{
+    --accent:#9d50bb; --accent2:#6e8efb; --gold1:#ffcc00; --gold2:#ff9900; --gold3:#ff6600;
+  }
+  body{margin:0;font-family:system-ui,Tahoma,Arial;background:#0f0a19;color:#eae6ff}
+  .wrap{max-width:520px;margin:24px auto;padding:0 14px}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:16px;
+    position:relative; overflow:hidden; box-shadow:0 14px 36px rgba(0,0,0,.45)
+  }
+  /* تمويج فخم */
+  .card::after{
+    content:""; position:absolute; inset:-30% -10%; transform:skewY(-12deg);
+    background:linear-gradient(90deg, rgba(158,80,187,.28), rgba(110,142,251,.23), rgba(126,224,255,.20));
+    filter:blur(22px); animation:float 8s ease-in-out infinite alternate; pointer-events:none;
+  }
+  @keyframes float{from{transform:translateY(-8px) skewY(-12deg)} to{transform:translateY(8px) skewY(-12deg)}}
+
+  .title{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .title .material-icons{font-size:22px;color:#7ee0ff}
+
+  .vip-badge{
+    display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;
+    background:linear-gradient(45deg,var(--gold1),var(--gold2),var(--gold3));
+    color:#fff;font-weight:900;padding:10px 18px;border-radius:999px;background-size:300% 300%;
+    animation:glow 4s ease infinite; box-shadow:0 8px 22px rgba(255,153,0,.45)
+  }
+  @keyframes glow{
+    0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+  }
+  .hint{margin-top:10px;font-size:13px;color:#cfc7ff}
+  .bar{margin-top:10px;height:10px;border-radius:12px;background:#e9e7ff22;border:1px solid #e9e7ff33;overflow:hidden}
+  .bar > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 0 18px rgba(110,142,251,.6) inset;transition:width .4s ease}
+  .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .pill{background:#ffffff10;border:1px solid #ffffff22;color:#eae6ff;padding:6px 10px;border-radius:999px;font-size:12px}
+  .err{color:#ff6b6b;margin-top:10px}
+</style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="title"><span class="material-icons">military_tech</span><b>شارة VIP</b></div>
+
+      <!-- الشارة -->
+      <button id="vipBtn" type="button" class="vip-badge">VIP1</button>
+
+      <!-- وصف + تقدم -->
+      <div id="vipHint" class="hint">جارٍ التحميل…</div>
+      <div class="bar"><span id="vipFill" style="width:0%"></span></div>
+
+      <!-- أرقام سريعة -->
+      <div class="row">
+        <div class="pill">مبلغ الصفقة: <b id="dealVal">—</b> $</div>
+        <div class="pill">إجمالي الأرباح: <b id="profitVal">—</b> $</div>
+      </div>
+
+      <div id="msg" class="err"></div>
+    </div>
+  </div>
+
+  <!-- Firebase compat v9 -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script>
+    /* 1) Firebase */
+    const firebaseConfig = {
+      apiKey:"AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+      authDomain:"trading-4b0aa.firebaseapp.com",
+      databaseURL:"https://trading-4b0aa-default-rtdb.firebaseio.com",
+      projectId:"trading-4b0aa",
+      storageBucket:"trading-4b0aa.appspot.com",
+      messagingSenderId:"738549332722",
+      appId:"1:738549332722:web:6e407e8312dd0600842e6b",
+      measurementId:"G-4MMPM6LMN4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    /* 2) Helpers */
+    function getUID(){
+      const p=new URLSearchParams(location.search); const u=p.get('uid');
+      if(u && u.trim()!=='') return u;
+      try{ return (JSON.parse(localStorage.getItem('loggedInUser')||'{}').userId)||null }catch{return null}
+    }
+    function getVIPLevel(deal){
+      if (deal >= 30000) return 'VIP7';
+      if (deal >= 10000) return 'VIP6';
+      if (deal >= 3000)  return 'VIP5';
+      if (deal >= 1000)  return 'VIP4';
+      if (deal >= 300)   return 'VIP3';
+      if (deal >= 50)    return 'VIP2';
+      return 'VIP1';
+    }
+    const VIP_MIN={VIP1:0,VIP2:50,VIP3:300,VIP4:1000,VIP5:3000,VIP6:10000,VIP7:30000};
+
+    function renderVIP(deal,totalProfit){
+      const btn=document.getElementById('vipBtn');
+      const hint=document.getElementById('vipHint');
+      const fill=document.getElementById('vipFill');
+      const dealVal=document.getElementById('dealVal');
+      const profitVal=document.getElementById('profitVal');
+
+      const lvl=getVIPLevel(deal);
+      btn.textContent=lvl;
+
+      const order=['VIP1','VIP2','VIP3','VIP4','VIP5','VIP6','VIP7'];
+      const i=order.indexOf(lvl);
+      const curMin=VIP_MIN[lvl], nextLvl=order[Math.min(i+1,order.length-1)], nextMin=VIP_MIN[nextLvl];
+
+      let pct=100, msg=`مستواك الحالي: ${lvl}`;
+      if(lvl!=='VIP7'){
+        const range=Math.max(1,nextMin-curMin);
+        pct=Math.max(0,Math.min(100,Math.floor(((deal-curMin)/range)*100)));
+        msg=`متبقٍ ${Math.max(0,nextMin-deal).toLocaleString()}$ للوصول إلى ${nextLvl}`;
+      }
+      hint.textContent=msg;
+      fill.style.width=pct+'%';
+      dealVal.textContent=(+deal||0).toLocaleString();
+      profitVal.textContent=(+totalProfit||0).toFixed(1);
+    }
+
+    /* 3) Bind */
+    const uid=getUID();
+    const msg=document.getElementById('msg');
+    if(!uid){ msg.textContent='لا يوجد مستخدم. افتح الرابط مع ?uid=YOUR_ID أو سجّل دخولك.'; }
+    else{
+      const userRef=db.ref('users/'+uid);
+      userRef.on('value', snap=>{
+        const d=snap.val()||{};
+        const deal=Number(d.deal)||0;
+        const tot =Number(d.totalProfit)||0;
+        renderVIP(deal, tot);
+      }, err=>{
+        msg.textContent='تعذّر قراءة البيانات: '+(err?.message||err);
+        console.error(err);
+      });
+    }
+
+    // اختياري: الضغط على الشارة يفتح صفحة المستويات
+    document.getElementById('vipBtn').addEventListener('click', ()=>{
+      if(uid) window.location.href = `levels.html?uid=${encodeURIComponent(uid)}`;
+    });
+  </script>
+</body>
+</html>

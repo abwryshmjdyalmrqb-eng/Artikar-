@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقارير التداول | Artiker Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      min-height: 100vh;
+    }
+    
+    .reports-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .reports-header {
+      background: linear-gradient(135deg, #6e48aa, #9d50bb);
+      color: white;
+      padding: 20px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .reports-header h1 {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+    }
+    
+    .reports-header h1 i {
+      margin-left: 10px;
+    }
+    
+    .user-info {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .filter-section {
+      background: white;
+      padding: 15px 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .filter-group label {
+      font-weight: bold;
+      color: #555;
+    }
+    
+    .filter-select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: white;
+      min-width: 150px;
+    }
+    
+    .filter-btn {
+      background: #6e48aa;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+    
+    .filter-btn:hover {
+      background: #9d50bb;
+    }
+    
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      background: white;
+    }
+    
+    .summary-card {
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+    }
+    
+    .deposit-icon { background: #2ecc71; }
+    .withdraw-icon { background: #e74c3c; }
+    .profit-icon { background: #3498db; }
+    
+    .card-info h3 {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    
+    .card-info p {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .reports-table-container {
+      background: white;
+      padding: 20px;
+      border-radius: 0 0 10px 10px;
+      overflow-x: auto;
+    }
+    
+    .reports-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .reports-table th {
+      background: #f8f9fa;
+      color: #555;
+      padding: 12px 15px;
+      text-align: right;
+      font-weight: bold;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .reports-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      text-align: right;
+    }
+    
+    .reports-table tr:hover {
+      background: #f9f9f9;
+    }
+    
+    .status-badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    
+    .completed { background: #d4edda; color: #155724; }
+    .pending { background: #fff3cd; color: #856404; }
+    .failed { background: #f8d7da; color: #721c24; }
+    
+    .action-btns {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .action-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-weight: bold;
+    }
+    
+    .print-btn {
+      background: #3498db;
+      color: white;
+    }
+    
+    .back-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .action-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #6e48aa;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 30px;
+      color: #6e48aa;
+    }
+    
+    @media (max-width: 768px) {
+      .reports-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .filter-section {
+        flex-direction: column;
+      }
+      
+      .summary-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+  <div class="reports-container">
+    <div class="reports-header">
+      <h1><i class="material-icons">assessment</i> التقارير الشاملة</h1>
+      <div class="user-info" id="userInfo">ID: جاري التحميل...</div>
+    </div>
+    
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>نوع التقرير:</label>
+        <select id="reportType" class="filter-select">
+          <option value="all">السحوبات</option>
+         
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>الفترة الزمنية:</label>
+        <select id="timePeriod" class="filter-select">
+          <option value="all">الكل</option>
+          <option value="today">اليوم</option>
+          <option value="week">هذا الأسبوع</option>
+          <option value="month">هذا الشهر</option>
+        </select>
+      </div>
+      
+      <button class="filter-btn" onclick="loadReports()">
+        <i class="material-icons">search</i> بحث
+      </button>
+    </div>
+    
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="card-icon deposit-icon">
+          <i class="material-icons">call_received</i>
+        </div>
+        <div class="card-info">
+          <h3>اجمالي الايداعات</h3>
+          <p id="totalDeposits">0.0 $</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon withdraw-icon">
+          <i class="material-icons">call_made</i>
+        </div>
+        <div class="card-info">
+          <h3>إجمالي السحوبات</h3>
+          <p id="totalWithdrawals">0.0 $</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon profit-icon">
+          <i class="material-icons">trending_up</i>
+        </div>
+        <div class="card-info">
+          <h3>إجمالي الأرباح</h3>
+          <p id="totalProfits">0.0 $</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reports-table-container">
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>التاريخ</th>
+            <th>النوع</th>
+            <th>المبلغ</th>
+            <th>الحالة</th>
+            <th>التفاصيل</th>
+          </tr>
+        </thead>
+        <tbody id="reportsTableBody">
+          <tr>
+            <td colspan="6" class="loading">
+              <i class="material-icons" style="font-size:40px;">hourglass_empty</i>
+              <p>جاري تحميل البيانات...</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="action-btns">
+      <button class="action-btn print-btn" onclick="printReport()">
+        <i class="material-icons">print</i> طباعة التقرير
+      </button>
+      <button class="action-btn back-btn" onclick="goBack()">
+        <i class="material-icons">arrow_back</i> العودة
+      </button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  
+  <script>
+    // تهيئة Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+      authDomain: "trading-4b0aa.firebaseapp.com",
+      databaseURL: "https://trading-4b0aa-default-rtdb.firebaseio.com",
+      projectId: "trading-4b0aa",
+      storageBucket: "trading-4b0aa.appspot.com",
+      messagingSenderId: "738549332722",
+      appId: "1:738549332722:web:6e407e8312dd0600842e6b",
+      measurementId: "G-4MMPM6LMN4"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // دالة العودة
+    function goBack() {
+      window.location.href = 'index5.html'; // تغيير هذا لصفحتك الرئيسية
+    }
+
+    // دالة تحميل التقارير من Firebase (محدثة حسب طلبك)
+    function loadReports() {
+      const user = JSON.parse(localStorage.getItem('loggedInUser'));
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const userId = user.userId;
+      document.getElementById("userInfo").textContent = `ID: ${userId}`;
+      
+      // عرض تحميل
+      document.getElementById("reportsTableBody").innerHTML = `
+        <tr>
+          <td colspan="6" class="loading">
+            <i class="material-icons" style="font-size:40px;">hourglass_empty</i>
+            <p>جاري تحميل البيانات...</p>
+          </td>
+        </tr>`;
+      
+      // جلب بيانات المستخدم كما في طلبك
+      const userRef = database.ref("users/" + userId);
+      userRef.on("value", (snapshot) => {
+        const data = snapshot.val();
+        
+        // تحديث الإحصائيات الرئيسية
+        document.getElementById("totalProfits").textContent = (data.totalProfit || 0).toFixed(1) + ' $';
+        document.getElementById("totalDeposits").textContent = (data.deal || 0).toFixed(1) + ' $';
+        document.getElementById("totalWithdrawals").textContent = (data.withdraw || 0).toFixed(1) + ' $';
+        
+        // جلب التقارير التفصيلية
+        loadDetailedReports(userId);
+      }, (error) => {
+        console.error("Error loading user data:", error);
+        document.getElementById("reportsTableBody").innerHTML = `
+          <tr>
+            <td colspan="6" class="no-data">
+              <i class="material-icons" style="font-size:40px;">error</i>
+              <p>حدث خطأ في جلب البيانات</p>
+            </td>
+          </tr>`;
+      });
+    }
+
+    // دالة جلب التقارير التفصيلية
+    function loadDetailedReports(userId) {
+      const reportType = document.getElementById("reportType").value;
+      const timePeriod = document.getElementById("timePeriod").value;
+      
+      const dbRef = database.ref();
+      const reports = [];
+      
+      // جلب الإيداعات
+      // جلب كل الإيداعات
+dbRef.child('deposits').once('value', (snapshot) => {
+  snapshot.forEach(deposit => {
+    const data = deposit.val();
+    if (data.userId === userId) {
+      reports.push({
+        id: deposit.key,
+        date: data.date || new Date().toISOString(),
+        type: 'deposit',
+        amount: data.amount || 0,
+        status: data.status || 'completed',
+        details: `إيداع إلى ${data.walletType || 'غير محدد'}`
+      });
+    }
+  });
+
+
+        
+        // جلب السحوبات
+        dbRef.child('withdrawals').orderByChild('userId').equalTo(userId).once('value', (snapshot) => {
+  let totalWithdraw = 0;
+
+  snapshot.forEach(withdrawal => {
+    const data = withdrawal.val();
+    totalWithdraw += parseFloat(data.amount || 0);
+
+    reports.push({
+      id: withdrawal.key,
+      date: data.timestamp || data.date || new Date().toISOString(),
+      type: 'withdraw',
+      amount: data.amount || 0,
+      status: data.status || 'pending',
+      details: `سحب عبر ${data.walletNetwork || 'غير محدد'}`
+    });
+  });
+
+  // ✅ عرض إجمالي السحوبات من السجلات
+  document.getElementById("totalWithdrawals").textContent = totalWithdraw.toFixed(1) + ' $';
+          
+          // جلب الأرباح (من pendingTrades أو أي مصدر آخر)
+          dbRef.child('pendingTrades').orderByChild('userId').equalTo(userId).once('value', (snapshot) => {
+            snapshot.forEach(trade => {
+              const data = trade.val();
+              if (data.profit || data.amount) {
+                reports.push({
+                  id: trade.key,
+                  date: data.timestamp || data.date || new Date().toISOString(),
+                  type: 'profit',
+                  amount: data.profit || data.amount || 0,
+                  status: 'completed',
+                  details: 'ربح من التداول'
+                });
+              }
+            });
+            
+            // فلترة البيانات حسب الاختيار
+            let filteredReports = reports;
+            
+            if (reportType !== 'all') {
+              filteredReports = filteredReports.filter(report => report.type === reportType);
+            }
+            
+            if (timePeriod !== 'all') {
+              const now = new Date();
+              filteredReports = filteredReports.filter(report => {
+                const reportDate = new Date(report.date);
+                
+                if (timePeriod === 'today') {
+                  return reportDate.toDateString() === now.toDateString();
+                } else if (timePeriod === 'week') {
+                  const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+                  return reportDate >= weekStart;
+                } else if (timePeriod === 'month') {
+                  return reportDate.getMonth() === now.getMonth() && 
+                         reportDate.getFullYear() === now.getFullYear();
+                }
+                return true;
+              });
+            }
+            
+            // ترتيب حسب التاريخ
+            filteredReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            displayReports(filteredReports);
+          });
+        });
+      });
+    }
+    
+    // دالة عرض التقارير
+    function displayReports(reports) {
+      const tbody = document.getElementById("reportsTableBody");
+      let html = '';
+      
+      if (reports.length === 0) {
+        html = `
+          <tr>
+            <td colspan="6" class="no-data">
+              <i class="material-icons" style="font-size:40px;">info</i>
+              <p>لا توجد بيانات متاحة</p>
+            </td>
+          </tr>`;
+      } else {
+        reports.forEach((report, index) => {
+          const date = new Date(report.date).toLocaleDateString('ar-EG', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          let typeText = '';
+          let typeClass = '';
+          
+          if (report.type === 'deposit') {
+            typeText = 'إيداع';
+            typeClass = 'text-success';
+          } else if (report.type === 'withdraw') {
+            typeText = 'سحب';
+            typeClass = 'text-danger';
+          } else if (report.type === 'profit') {
+            typeText = 'ربح';
+            typeClass = 'text-primary';
+          }
+          
+          let statusBadge = '';
+          if (report.status === 'completed') {
+            statusBadge = '<span class="status-badge completed">مكتمل</span>';
+          } else if (report.status === 'pending') {
+            statusBadge = '<span class="status-badge pending">قيد الانتظار</span>';
+          } else if (report.status === 'failed') {
+            statusBadge = '<span class="status-badge failed">فشل</span>';
+          }
+          
+          html += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${date}</td>
+              <td class="${typeClass}">${typeText}</td>
+              <td>${parseFloat(report.amount).toFixed(1)} $</td>
+              <td>${statusBadge}</td>
+              <td>${report.details || '-'}</td>
+            </tr>`;
+        });
+      }
+      
+      tbody.innerHTML = html;
+    }
+    
+    // دالة طباعة التقرير
+    function printReport() {
+      const printContent = document.querySelector('.reports-container').innerHTML;
+      const originalContent = document.body.innerHTML;
+      
+      document.body.innerHTML = `
+        <style>
+          @media print {
+            body { padding: 20px; }
+            .action-btns, .filter-section { display: none !important; }
+            .reports-header { background: #6e48aa !important; -webkit-print-color-adjust: exact; }
+          }
+        </style>
+        ${printContent}
+      `;
+      
+      window.print();
+      document.body.innerHTML = originalContent;
+    }
+    
+    // عند تحميل الصفحة
+    window.onload = function() {
+      loadReports();
+    };
+  </script>
+</body>
+</html>

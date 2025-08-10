@@ -1,0 +1,85 @@
+.trading-wrapper body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, #2c003e, #000000);
+  color: white;
+  min-height: 100vh;
+  position: relative;
+}
+
+.trading-wrapper .background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('bg.jpg') no-repeat center center / cover;
+  filter: blur(6px) brightness(0.5);
+  z-index: -2;
+}
+
+.trading-wrapper .container {
+  max-width: 450px;
+  margin: auto;
+  padding: 20px;
+  z-index: 1;
+}
+
+.trading-wrapper .glass-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.trading-wrapper .ticker {
+  background-color: #7b1fa2;
+  color: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.trading-wrapper .slider img {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  height: 180px;
+  object-fit: cover;
+}
+
+.trading-wrapper .button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.trading-wrapper .nav-btn {
+  background: linear-gradient(to right, #8e24aa, #7b1fa2);
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.trading-wrapper .nav-btn i {
+  font-size: 18px;
+  margin-left: 8px;
+}
+
+.trading-wrapper .nav-btn:hover {
+  background: #6a1b9a;
+}
+
+.trading-wrapper .footer-btn {
+  text-align: center;
+}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دعوة الأصدقاء | Artiker</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#BFBFBF; --bg2:#BFBFBF;       /* خلفية */
+    --card:#ffffff;                      /* الكروت */
+    --text:#222; --muted:#666; --white:#fff;
+    --grad1:#9d50bb; --grad2:#a777e3;   /* ألوانك */
+    --accent:#9d50bb; --accent2:#a777e3;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family: system-ui, Tahoma, Arial;
+    background: radial-gradient(1200px 600px at 50% -200px,var(--bg2),var(--bg1));
+    color:var(--white);
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:20px 14px 28px}
+  .hero{
+    background: linear-gradient(135deg,var(--grad1),var(--grad2));
+    border-radius: var(--radius);
+    padding:22px 18px;margin-top:6px; box-shadow:0 10px 30px rgba(0,0,0,.25)
+  }
+  .hero h1{margin:0 0 8px;font-size:26px}
+  .hero p{margin:0;color:#f3eaff}
+  .card{
+    margin-top:14px;background:var(--card);color:var(--text);
+    border-radius: var(--radius); padding:18px; box-shadow:0 8px 24px rgba(0,0,0,.18)
+  }
+  .row{display:grid;gap:12px}
+  .row.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .row.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media(max-width:640px){.row.cols-3{grid-template-columns:repeat(2,1fr)}}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:8px; padding:12px 14px; border:none; cursor:pointer; font-weight:600;
+    border-radius:14px; transition:.2s; text-decoration:none
+  }
+  .btn-grad{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .btn-grad:hover{filter:brightness(1.08)}
+  .btn-soft{background:#f3f1ff;color:#4a3b7a}
+  .btn-soft:hover{background:#ebe7ff}
+  .social{
+    display:flex;flex-wrap:wrap;gap:10px
+  }
+  .social .chip{
+    background:#f7f7ff;border:1px solid #ececff;color:#333;
+    padding:10px 12px;border-radius:14px;display:flex;align-items:center;gap:8px;cursor:pointer
+  }
+  .chip:hover{background:#f1f1ff}
+  .hint{font-size:13px;color:var(--muted);margin-top:6px}
+  .footer-note{margin-top:14px;color:#ddd;font-size:13px}
+  .ok{color:#11a36a}
+  .err{color:#c0392b}
+</style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <h1>ادعُ أصدقاءك 🎉</h1>
+      <p>انشر رابطنا على كل المنصات بنقرة واحدة — مكافأة ترحيبية 0.50$ عند الاشتراك بقناتنا الرسمية.</p>
+    </div>
+
+    <!-- رابط الدعوة -->
+    <div class="card">
+      <h3 style="margin:0 0 10px">رابط الدعوة الخاص بالحملة</h3>
+      <div class="row cols-2">
+        <input id="inviteLink" value="https://abwryshmjdyalmrqb-eng.github.io/Artikar-/" readonly
+               style="width:100%;padding:12px 10px;border-radius:12px;border:1px solid #e9e6ff;outline:none;font-size:14px;background:#fbfbff">
+        <button class="btn btn-grad" id="copyBtn"><span class="material-icons">content_copy</span>نسخ الرابط</button>
+      </div>
+      <div class="hint" id="copyNote"></div>
+    </div>
+
+    <!-- مشاركة -->
+    <div class="card">
+      <h3 style="margin-top:0">مشاركة عبر الشبكات</h3>
+      <div class="social" id="socialList">
+        <!-- الأزرار تُنشأ من السكربت -->
+      </div>
+      <div class="hint">لو جهازك يدعم <b>Web Share</b>، بنفتح نافذة المشاركة الأصلية. غير كذا بنستخدم روابط المشاركة أو ننسخ الرابط تلقائيًا. </div>
+    </div>
+
+    <!-- الاشتراك والمكافأة -->
+    <div class="card">
+      <h3 style="margin:0 0 10px">الاشتراك بالقناة الرسمية</h3>
+      <div class="row cols-2">
+        <a class="btn btn-grad" href="https://t.me/artikarTrading" target="_blank" rel="noopener">
+          <span class="material-icons">send</span> الاشتراك بالقناة
+        </a>
+        <button class="btn btn-soft" id="verifyBtn">
+          <span class="material-icons">verified</span> تحقّق من الاشتراك وإيداع 0.50$
+        </button>
+      </div>
+      <div class="hint" id="verifyNote">بعد الضغط على "الاشتراك بالقناة" ارجع واضغط "تحقّق" لإضافة المكافأة (مرة واحدة لكل مستخدم).</div>
+      <div class="footer-note">سيتم إيداع المكافأة في رصيد أرباحك  وعرضها في واجهتك).</div>
+    </div>
+
+  </div>
+
+  <!-- Firebase (v10) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // === إعداد Firebase (حسب ما عطيتني) ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+      authDomain: "trading-4b0aa.firebaseapp.com",
+      databaseURL: "https://trading-4b0aa-default-rtdb.firebaseio.com",
+      projectId: "trading-4b0aa",
+      storageBucket: "trading-4b0aa.appspot.com", // ملاحظة: هذا الشكل المعتاد
+      messagingSenderId: "738549332722",
+      appId: "1:738549332722:web:6e407e8312dd0600842e6b",
+      measurementId: "G-4MMPM6LMN4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    // ===== زر نسخ الرابط =====
+    const inviteLinkEl = document.getElementById("inviteLink");
+    const copyBtn = document.getElementById("copyBtn");
+    const copyNote = document.getElementById("copyNote");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(inviteLinkEl.value);
+        copyNote.innerHTML = `<span class="ok">✅ تم نسخ الرابط.</span>`;
+        setTimeout(()=> copyNote.textContent = "", 2000);
+      } catch {
+        copyNote.innerHTML = `<span class="err">⚠️ لم يتم النسخ، انسخ يدويًا.</span>`;
+      }
+    });
+
+    // ===== إنشاء أزرار المشاركة =====
+    const shareTargets = [
+      { name:"واتساب", icon:"chat",   url:(u,t)=>`https://wa.me/?text=${encodeURIComponent(t+" "+u)}` },
+      { name:"تيليجرام", icon:"send", url:(u,t)=>`https://t.me/share/url?url=${encodeURIComponent(u)}&text=${encodeURIComponent(t)}` },
+      { name:"فيسبوك", icon:"thumb_up", url:(u)=>`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}` },
+      { name:"X (تويتر)", icon:"share", url:(u,t)=>`https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent(t)}` },
+      { name:"تيك توك", icon:"movie", url:()=>null },     // لا يوجد رابط رسمي — سننسخ
+      { name:"إنستجرام", icon:"photo_camera", url:()=>null }, // لا مشاركة ويب — سننسخ
+      { name:"لايكي", icon:"favorite", url:()=>null },
+      { name:"إيمو", icon:"call", url:()=>null }
+    ];
+    const msg = "انضم إلى Artikar منصة التداول بالذكاء الاصطناعي وقم بتداول وحقق ارباح خيالية";
+    const socialList = document.getElementById("socialList");
+
+    // Web Share أولًا
+    if (navigator.share) {
+      const shareAll = document.createElement("button");
+      shareAll.className = "btn btn-grad";
+      shareAll.style.marginBottom = "10px";
+      shareAll.innerHTML = `<span class="material-icons">ios_share</span> مشاركة عبر النظام`;
+      shareAll.onclick = ()=> navigator.share({ title:"Artiker", text:msg, url: inviteLinkEl.value }).catch(()=>{});
+      socialList.appendChild(shareAll);
+    }
+
+    shareTargets.forEach(t=>{
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.innerHTML = `<span class="material-icons">${t.icon}</span>${t.name}`;
+      chip.onclick = async () => {
+        const u = inviteLinkEl.value;
+        const target = t.url(u,msg);
+        if (target) {
+          window.open(target, "_blank");
+        } else {
+          // منصات بلا مشاركة ويب — انسخ الرابط
+          try { await navigator.clipboard.writeText(`${msg}\n${u}`); } catch {}
+          alert(`تم نسخ الرابط — الصقه داخل ${t.name}.`);
+        }
+      };
+      socialList.appendChild(chip);
+    });
+
+    // ===== التحقق و إيداع المكافأة 0.50$ (مرة واحدة) =====
+    const verifyBtn  = document.getElementById("verifyBtn");
+    const verifyNote = document.getElementById("verifyNote");
+
+    function getUserIdFromLocalStorage(){
+      try{
+        const raw = localStorage.getItem("loggedInUser");
+        if (!raw) return null;
+        const obj = JSON.parse(raw);
+        return obj.userId || null;
+      }catch{ return null; }
+    }
+
+    async function depositBonusOnce(userId){
+      const userRef = ref(db, `users/${userId}`);
+      const flagRef = ref(db, `users/${userId}/bonusInviteClaimed`);
+
+      // افحص العلم أولًا
+      const snap = await get(flagRef);
+      if (snap.exists() && snap.val() === true) {
+        return { ok:false, msg:"سبق إضافة المكافأة لهذا الحساب." };
+      }
+
+      // معاملة لزيادة totalProfit بمقدار 0.5 مرة واحدة
+      const totalRef = ref(db, `users/${userId}/totalProfit`);
+      await runTransaction(totalRef, (current) => {
+        const cur = typeof current === "number" ? current : 0;
+        return +(cur + 0.5).toFixed(2);
+      });
+      // علّم أنه تم الصرف
+      await set(flagRef, true);
+
+      // حدّث الواجهة لو موجودة
+      const pa = document.querySelector(".profit-amount");
+      if (pa) {
+        const n = parseFloat(pa.textContent) || 0;
+        pa.textContent = (n + 0.5).toFixed(1);
+      }
+      return { ok:true };
+    }
+
+    verifyBtn.addEventListener("click", async ()=>{
+      verifyBtn.disabled = true;
+      verifyNote.textContent = "جاري التحقق وإيداع المكافأة...";
+      const userId = getUserIdFromLocalStorage();
+
+      if (!userId){
+        verifyNote.innerHTML = '<span class="err">لم يتم العثور على حساب مستخدم. ادخل بحسابك أولًا.</span>';
+        verifyBtn.disabled = false;
+        return;
+      }
+
+      try{
+        const res = await depositBonusOnce(userId);
+        if (res.ok){
+          verifyNote.innerHTML = '<span class="ok">✅ تمت إضافة 0.50$ إلى رصيدك.</span>';
+        } else {
+          verifyNote.innerHTML = `<span class="err">⚠️ ${res.msg}</span>`;
+        }
+      }catch(e){
+        console.error(e);
+        verifyNote.innerHTML = '<span class="err">حدث خطأ أثناء الإيداع. حاول لاحقًا.</span>';
+      }finally{
+        verifyBtn.disabled = false;
+      }
+    });
+
+    // ملاحظة أمان/دقّة:
+    // لا يمكن التحقق فعليًا من الاشتراك بقناة تيليجرام من المتصفح فقط.
+    // لتحقيق دقّة 100% استخدم بوتك: المستخدم يضغط "تحقق" -> نفتح deep-link للبوت -> البوت يتأكد من العضوية بقناتك (getChatMember) ثم يكتب في DB أن المكافأة مستحقة. هذا يحتاج سيرفر/كلود فنكشن.
+  </script>
+</body>
+</html>

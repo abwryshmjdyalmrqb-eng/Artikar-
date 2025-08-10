@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artikar - خدمة العملاء</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #9d50bb;
+            --secondary: #6e48aa;
+            --accent: #ff7e5f;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
+            background-size: cover;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, white, #ffd7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .logo span {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), #ffb347);
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-title i {
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 126, 95, 0.3);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #ff7e5f, #ffb347);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 5px 20px rgba(157, 80, 187, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(157, 80, 187, 0.6);
+        }
+        
+        .btn-telegram {
+            background: linear-gradient(45deg, #0088cc, #34b7f1);
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
+        }
+        
+        .btn-telegram:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.6);
+        }
+        
+        .btn i {
+            margin-left: 10px;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .feature p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+        
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating-1 {
+            position: absolute;
+            top: 20%;
+            left: 5%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent), #ffb347);
+            filter: blur(20px);
+            opacity: 0.3;
+            animation: floating 8s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .floating-2 {
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            filter: blur(25px);
+            opacity: 0.2;
+            animation: floating 10s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        /* نوافذ منبثقة مخصصة */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateY(50px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), #ffb347);
+        }
+        
+        .modal-icon {
+            text-align: center;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .modal-success .modal-icon {
+            color: var(--success);
+        }
+        
+        .modal-error .modal-icon {
+            color: var(--error);
+        }
+        
+        .modal-warning .modal-icon {
+            color: var(--warning);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .modal-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .modal-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .modal-success .modal-btn {
+            background: linear-gradient(45deg, var(--success), #27ae60);
+            color: white;
+        }
+        
+        .modal-error .modal-btn {
+            background: linear-gradient(45deg, var(--error), #c0392b);
+            color: white;
+        }
+        
+        .modal-warning .modal-btn {
+            background: linear-gradient(45deg, var(--warning), #e67e22);
+            color: white;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 1.1rem;
+            }
+            
+            .features {
+                flex-direction: column;
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+            
+            .modal-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+    <div class="floating-1"></div>
+    <div class="floating-2"></div>
+    
+    <!-- نوافذ منبثقة -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal modal-success">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="modal-title">تم بنجاح!</h3>
+            <p class="modal-message">تم إرسال رسالتك بنجاح. سنقوم بالرد عليك في أقرب وقت ممكن.</p>
+            <button class="modal-btn" onclick="closeModal('successModal')">حسناً</button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="errorModal">
+        <div class="modal modal-error">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h3 class="modal-title">حدث خطأ!</h3>
+            <p class="modal-message" id="errorMessage">حدث خطأ أثناء محاولة إرسال رسالتك. يرجى المحاولة مرة أخرى لاحقاً.</p>
+            <button class="modal-btn" onclick="closeModal('errorModal')">حسناً</button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal modal-warning">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="modal-title">تنبيه!</h3>
+            <p class="modal-message" id="warningMessage">الرجاء تعبئة جميع الحقول المطلوبة.</p>
+            <button class="modal-btn" onclick="closeModal('warningModal')">حسناً</button>
+        </div>
+    </div>
+    
+    <div class="container floating">
+        <div class="logo">
+            <h1>Artikar <span>خدمة العملاء</span></h1>
+            <p>نحن هنا لمساعدتك على مدار الساعة</p>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-comment-dots"></i> تواصل معنا</h2>
+            
+            <div class="form-group">
+                <label for="name">الاسم الكامل</label>
+                <input type="text" id="name" class="form-control" placeholder="أدخل اسمك الثلاثي">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">رقم الجوال</label>
+                <input type="tel" id="phone" class="form-control" placeholder="مثال: 05XXXXXXXX">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">رسالتك</label>
+                <textarea id="message" class="form-control" placeholder="أخبرنا كيف يمكننا مساعدتك..."></textarea>
+            </div>
+            
+            <button class="btn btn-primary pulse" onclick="sendData()">
+                <i class="fas fa-paper-plane"></i> إرسال الرسالة
+            </button>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title"><i class="fab fa-telegram"></i> تواصل عبر تيليجرام</h2>
+            <p style="margin-bottom: 25px; font-size: 1.1rem;">
+                يمكنك التواصل معنا مباشرة عبر بوت التليجرام للحصول على دعم فوري والإجابة على استفساراتك
+            </p>
+            
+            <a href="https://t.me/artikarbot" target="_blank" class="btn btn-telegram">
+                الدخول إلى بوت التيليجرام <i class="fab fa-telegram-plane"></i>
+            </a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-headset"></i>
+                <h3>دعم فني 24/7</h3>
+                <p>فريق دعم فني متاح على مدار الساعة طوال أيام الأسبوع</p>
+            </div>
+            
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <h3>حماية وأمان</h3>
+                <p>بياناتك محمية بأحدث أنظمة التشفير والأمان</p>
+            </div>
+            
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <h3>استجابة فورية</h3>
+                <p>رد سريع على استفساراتك خلال دقائق معدودة</p>
+            </div>
+        </div>
+    </div>
+    
+<script>
+  function sendData() {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !phone || !message) {
+      showModal('warningModal', 'الرجاء تعبئة جميع الحقول المطلوبة.');
+      return;
+    }
+
+// تحقق من صحة رقم الجوال للدول العربية فقط
+// ✅ تحقق من صحة رقم الجوال العربي المحلي
+// تحقق من صحة رقم الجوال
+
+
+// تحقق من صحة رقم الجوال العربي المحلي
+// تحقق من صحة رقم الجوال
+// تحقق من صحة رقم الجوال العربي المحلي
+if (!/^((05|5)[0-9]{8}|(01)[0-9]{9}|(3)[0-9]{7}|(7)[0-9]{8}|(6|9)[0-9]{7}|(059|056|058|052|050|055|057)[0-9]{6})$/.test(phone)) {
+  // الرقم غير صحيح أو لا يتبع تنسيق عربي
+
+
+
+
+
+      showModal('warningModal', 'رقم الجوال غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
+      return;
+    }
+
+    const fullMessage = `
+📬 *رسالة جديدة من صفحة الدعم:*
+👤 الاسم: ${name}
+📞 الهاتف: ${phone}
+📝 الرسالة: ${message}
+🕒 الوقت: ${new Date().toLocaleString('ar')}
+    `;
+
+    const token = "8414291851:AAHzQjymfH23ec5-DzZaphPeCUqZsJEe_Fo";
+    const chatId = "7947761640";
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    // تغيير نص الزر أثناء الإرسال
+    const btn = document.querySelector('.btn-primary');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الإرسال...';
+    btn.style.background = 'linear-gradient(45deg, #3498db, #2980b9)';
+    btn.classList.remove('pulse');
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: fullMessage,
+        parse_mode: "Markdown"
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        btn.innerHTML = '<i class="fas fa-check"></i> تم الإرسال بنجاح!';
+        btn.style.background = 'linear-gradient(45deg, var(--success), #27ae60)';
+        
+        // إظهار نافذة النجاح
+        showModal('successModal');
+        
+        // إعادة تعيين الحقول
+        document.getElementById('name').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('message').value = '';
+
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرسالة';
+          btn.style.background = 'linear-gradient(45deg, var(--primary), var(--secondary))';
+          btn.classList.add('pulse');
+        }, 3000);
+      } else {
+        throw new Error("Failed to send message");
+      }
+    })
+    .catch(error => {
+      console.error("Telegram Error:", error);
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرسالة';
+      btn.style.background = 'linear-gradient(45deg, var(--primary), var(--secondary))';
+      btn.classList.add('pulse');
+      
+      showModal('errorModal', 'حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى أو التواصل عبر التيليجرام.');
+    });
+  }
+
+  // وظائف إدارة النوافذ المنبثقة
+  function showModal(modalId, message = '') {
+    if (message) {
+      if (modalId === 'errorModal') {
+        document.getElementById('errorMessage').textContent = message;
+      } else if (modalId === 'warningModal') {
+        document.getElementById('warningMessage').textContent = message;
+      }
+    }
+    
+    document.getElementById(modalId).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  // تأثيرات الإدخال
+  document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('focus', function () {
+      this.parentNode.style.transform = 'translateY(-5px)';
+    });
+
+    input.addEventListener('blur', function () {
+      this.parentNode.style.transform = 'translateY(0)';
+    });
+  });
+
+  // إغلاق النوافذ بالضغط على ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+    }
+  });
+
+  // إغلاق النوافذ بالضغط خارجها
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  });
+</script>
+</body>
+</html>

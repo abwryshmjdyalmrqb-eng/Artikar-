@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة التداول - Artiker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    html, body {
+      font-family: 'Cairo', sans-serif;
+      background: #f3f3f7;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      padding: 15px;
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .info-card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .info-title {
+      font-weight: bold;
+      font-size: 14px;
+      color: #666;
+    }
+    .info-value {
+      font-size: 20px;
+      color: #6a11cb;
+    }
+    .btn-trade {
+      width: 100%;
+      background: linear-gradient(to left, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .vip-table th {
+      background: #6a11cb;
+      color: white;
+    }
+    .vip-table td, .vip-table th {
+      text-align: center;
+    }
+    .status {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .status.red { color: red; }
+    .status.green { color: green; }
+    .symbol-strip {
+      font-size: 28px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    /* تخصيص SweetAlert2 */
+    .swal2-popup {
+      font-family: 'Cairo', sans-serif;
+      border-radius: 15px !important;
+      direction: rtl;
+    }
+    .swal2-title {
+      font-size: 20px !important;
+    }
+    .swal2-confirm {
+      background: linear-gradient(to left, #6a11cb, #2575fc) !important;
+      border: none !important;
+      border-radius: 8px !important;
+      padding: 10px 25px !important;
+    }
+    .swal2-html-container {
+      text-align: right !important;
+    }
+    
+    
+    
+    
+    
+    
+    
+
+.loader-sm {
+  border: 3px solid #eee;
+  border-top: 3px solid #6a11cb;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin: auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+    
+    
+    
+    
+    #slideExitBtn {
+  position: fixed;
+  top: 90px;
+  right: 360px;
+  width: 35px;
+  height: 35px;
+  color: #fff;
+  background: linear-gradient(135deg, #9d50bb, #6e48aa);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#slideExitBtn:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(157, 80, 187, 0.4);
+  background: linear-gradient(135deg, #6e48aa, #9d50bb);
+}
+
+#slideExitBtn:active {
+  transform: scale(0.95);
+}
+
+@keyframes shake {
+  0% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-5px) rotate(-5deg); }
+  40% { transform: translateX(5px) rotate(5deg); }
+  60% { transform: translateX(-5px) rotate(-5deg); }
+  80% { transform: translateX(5px) rotate(5deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+    
+    
+    
+    
+    
+  </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+  <div class="header">
+    <div><small>:ID <span id="userId">##########</span></small></div>
+    <h4>Artiker Platform</h4>
+  </div>
+  <div class="container py-3">
+    <div class="row text-center mb-2">
+      <div class="col-12">
+        <span class="status red" id="status">● الحالة: غير نشط</span>
+      </div>
+   </div>
+<canvas id="tradingChart" height="130"></canvas>
+
+
+<div id="slideExitBtn" onclick="exitWithSlide()">&gt;</div>
+
+<!-- دوائر تحميل بدل القيم -->
+<div class="row mt-4">
+  <div class="col-6 col-md-3">
+    <div class="info-card">
+      <div class="info-title">الأصول المتاحة</div>
+      <div class="info-value" id="deal"><div class="loader-sm"></div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="info-card">
+      <div class="info-title">رسوم الحكومة</div>
+      <div class="info-value" id="tax"><div class="loader-sm"></div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="info-card">
+      <div class="info-title">إجمالي الأرباح</div>
+      <div class="info-value" id="totalProfit"><div class="loader-sm"></div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="info-card">
+      <div class="info-title">الأرباح اليومية</div>
+      <div class="info-value" id="profit"><div class="loader-sm"></div></div>
+    </div>
+  </div>
+</div>
+    <button class="btn-trade" id="startButton">بدء التداول ▶</button>
+    <div class="text-center mt-3 symbol-strip" id="symbols"></div>
+    <h5 class="mt-5 text-center">باقات VIP للتداول</h5>
+    <table class="table table-bordered vip-table">
+      <thead>
+        <tr>
+          <th>الباقة</th>
+          <th>السعر (USD)</th>
+          <th>الدخل اليومي (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>VIP1</td><td>10-20</td><td>0.9-2</td></tr>
+        <tr><td>VIP2</td><td>50-100</td><td>2.5-5.8</td></tr>
+        <tr><td>VIP3</td><td>300-600</td><td>15.6-36</td></tr>
+        <tr><td>VIP4</td><td>1000-2000</td><td>54-124</td></tr>
+        <tr><td>VIP5</td><td>3000-6000</td><td>168-384</td></tr>
+        <tr><td>VIP6</td><td>10000-20000</td><td>580-1320</td></tr>
+        <tr><td>VIP7</td><td>30000-60000</td><td>1800-4080</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, onValue, update, get, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBcgBaXfoQazccxSYF538PmpaL5fUH-RoA",
+    authDomain: "trading-4b0aa.firebaseapp.com",
+    databaseURL: "https://trading-4b0aa-default-rtdb.firebaseio.com",
+    projectId: "trading-4b0aa",
+    storageBucket: "trading-4b0aa.appspot.com",
+    messagingSenderId: "738549332722",
+    appId: "1:738549332722:web:6e407e8312dd0600842e6b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const userData = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!userData || !userData.userId) {
+    alert("لم يتم العثور على معرف المستخدم. يرجى تسجيل الدخول.");
+    window.location.href = "index.html";
+  }
+  const userId = userData.userId;
+  document.getElementById("userId").textContent = userId;
+
+  // ✅ التعديل المضاف هنا
+  const status = document.getElementById("status");
+  const symbols = document.getElementById("symbols");
+  let canTrade = true;
+  let chart;
+  const ctx = document.getElementById("tradingChart").getContext("2d");
+
+  const userRef = ref(db, `users/${userId}`);
+  get(userRef).then(snapshot => {
+    if (!snapshot.exists()) {
+      set(userRef, {
+        deal: 0,
+        profit: 0,
+        totalProfit: 0,
+        tax: 0,
+        lastTrade: 0
+      });
+    }
+  });
+
+  onValue(userRef, (snapshot) => {
+  const d = snapshot.val();
+  if (!d) return;
+
+
+
+
+
+  // تحديث الحقول بعد جلب البيانات
+  const dealEl = document.getElementById("deal");
+  const profitEl = document.getElementById("profit");
+  const taxEl = document.getElementById("tax");
+  const totalProfitEl = document.getElementById("totalProfit");
+
+  // التحقق إذا كانت الدائرة موجودة ثم إزالتها
+  if (dealEl.querySelector('.loader-sm')) dealEl.innerHTML = '';
+  if (profitEl.querySelector('.loader-sm')) profitEl.innerHTML = '';
+  if (taxEl.querySelector('.loader-sm')) taxEl.innerHTML = '';
+  if (totalProfitEl.querySelector('.loader-sm')) totalProfitEl.innerHTML = '';
+
+  // وضع القيم الجديدة
+  dealEl.textContent = (d.deal || 0).toFixed(1);
+  profitEl.textContent = (d.profit || 0).toFixed(1);
+  taxEl.textContent = (d.tax || 0).toFixed(1);
+  totalProfitEl.textContent = (d.totalProfit || 0).toFixed(1);
+});
+
+  onValue(ref(db, `users/${userId}/activeTrade`), async (snap) => {
+    const trade = snap.val();
+    if (!trade) return;
+
+    const now = Date.now();
+    const diff = now - trade.startTime;
+
+    if (diff >= 15000 && !trade.completed) {
+      const userSnap = await get(ref(db, `users/${userId}`));
+      const data = userSnap.val();
+      const net = trade.net;
+      const tax = trade.tax;
+      update(ref(db, `users/${userId}`), {
+        profit: (data.profit || 0) + net,
+        totalProfit: (data.totalProfit || 0) + net,
+        tax: tax,
+        lastTrade: Date.now(),
+        activeTrade: null
+      });
+
+      status.textContent = "✅ تم استكمال الصفقة السابقة";
+      status.className = "status green";
+      symbols.textContent = "📊";
+
+      Swal.fire({
+        title: 'تمت الصفقة بنجاح!',
+        html: `
+          <div style="text-align:right; direction:rtl">
+            <p style="font-size: 18px; margin-bottom: 15px;">🎉 لقد أكملت صفقة ناجحة</p>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+              <p style="margin: 5px 0;">الأرباح الصافية: <b style="color: #28a745;">${net}$</b></p>
+              <p style="margin: 5px 0;">رسوم الحكومة: <b style="color: #dc3545;">${tax}$</b></p>
+              <p style="margin: 5px 0;">إجمالي الربح: <b style="color: #6a11cb;">${(net + tax).toFixed(2)}$</b></p>
+            </div>
+          </div>
+        `,
+        icon: 'success',
+        confirmButtonText: 'تم',
+        background: '#ffffff'
+      });
+
+      setTimeout(() => {
+        symbols.textContent = "";
+        status.className = "status red";
+        status.textContent = "● الحالة: غير نشط";
+        canTrade = true;
+      }, 3000);
+    }
+  });
+
+  document.getElementById("startButton").onclick = async () => {
+    const now = Date.now();
+    const snap = await get(ref(db, `users/${userId}`));
+    const data = snap.val();
+    const lastTrade = data.lastTrade || 0;
+    const diff = now - lastTrade;
+
+    if (diff < 12 * 60 * 60 * 1000) {
+      const hoursLeft = Math.ceil((12 * 60 * 60 * 1000 - diff) / 3600000);
+      return Swal.fire({
+        title: 'لا يمكن التداول الآن',
+        html: `⏳ الرجاء الانتظار <b>${hoursLeft}</b> ساعة قبل البدء بصفقة جديدة`,
+        icon: 'warning',
+        confirmButtonText: 'حسناً',
+        background: '#ffffff',
+        timer: 5000
+      });
+    }
+
+    if (!canTrade) {
+      return Swal.fire({
+        title: 'صفقة قيد التنفيذ',
+        text: '⏳ الرجاء الانتظار حتى انتهاء الصفقة الحالية',
+        icon: 'info',
+        confirmButtonText: 'حسناً',
+        background: '#ffffff'
+      });
+    }
+
+    const deal = Number(data.deal || 0);
+    if (deal < 10) {
+      return Swal.fire({
+        title: 'رصيد غير كافٍ',
+        html: '🚫 <b>لا يوجد مبلغ كافٍ للصفقة</b><br>الحد الأدنى للصفقة هو 10$',
+        icon: 'error',
+        confirmButtonText: 'حسناً',
+        background: '#ffffff'
+      });
+    }
+
+    let min = 0.9, max = 2.0;
+    if (deal >= 50 && deal <= 100) [min, max] = [2.5, 5.8];
+    else if (deal >= 300 && deal <= 600) [min, max] = [15.6, 36];
+    else if (deal >= 1000 && deal <= 2000) [min, max] = [54, 124];
+    else if (deal >= 3000 && deal <= 6000) [min, max] = [168, 384];
+    else if (deal >= 10000 && deal <= 20000) [min, max] = [580, 1320];
+    else if (deal >= 30000 && deal <= 60000) [min, max] = [1800, 4080];
+
+    const gain = +(Math.random() * (max - min) + min).toFixed(2);
+    const tax = 3;
+    const net = +(gain - tax).toFixed(2);
+    const startTime = Date.now();
+
+    await set(ref(db, `users/${userId}/activeTrade`), {
+      gain,
+      tax,
+      net,
+      startTime,
+      completed: false
+    });
+
+    status.textContent = "✅ الحالة: نشط";
+    status.className = "status green";
+    symbols.textContent = "💹⚙️📈🔁💸";
+    canTrade = false;
+
+    Swal.fire({
+      title: 'جاري تنفيذ الصفقة',
+      html: `
+        <div style="text-align:right; direction:rtl">
+          <p>⏳ جاري تنفيذ صفقتك لمدة 15 ثانية</p>
+          <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px;">
+            <p style="margin: 5px 0; font-size: 14px;">مبلغ الصفقة: <b>${deal}$</b></p>
+            <p style="margin: 5px 0; font-size: 14px;">مستوى VIP: <b>${getVipLevel(deal)}</b></p>
+          </div>
+        </div>
+      `,
+      icon: 'info',
+      confirmButtonText: 'حسناً',
+      background: '#ffffff',
+      timer: 3000
+    });
+
+    if (chart) chart.destroy();
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['0s','3s','6s','9s','12s','15s'],
+        datasets: [{
+          label: 'ربح الصفقة',
+          data: [0, net/5, net/2, net*0.7, net*0.85, net],
+          backgroundColor: 'rgba(106, 17, 203, 0.2)',
+          borderColor: '#6a11cb',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#6a11cb'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { color: '#333' } },
+          x: { ticks: { color: '#333' } }
+        }
+      }
+    });
+  };
+
+  function getVipLevel(deal) {
+    if (deal >= 30000) return 'VIP7';
+    if (deal >= 10000) return 'VIP6';
+    if (deal >= 3000) return 'VIP5';
+    if (deal >= 1000) return 'VIP4';
+    if (deal >= 300) return 'VIP3';
+    if (deal >= 50) return 'VIP2';
+    return 'VIP1';
+  }
+
+  function showError(message) {
+    Swal.fire({
+      title: 'حدث خطأ',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'حسناً',
+      background: '#ffffff'
+    });
+  }
+  
+  // إضافة مستمع الأحداث للزر
+document.getElementById('slideExitBtn').addEventListener('click', exitWithSlide);
+  
+  
+  
+
+  
+  
+  
+  
+</script>
+
+
+  <script>
+// هذه الدالة متاحة globally
+function exitWithSlide() {
+  document.getElementById('slideExitBtn').style.animation = "shake 0.5s";
+  document.body.style.transform = "translateX(100%)";
+  document.body.style.opacity = "0";
+  document.body.style.transition = "all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+  
+  setTimeout(() => {
+    window.location.href = "index5.html"; // تأكد من صحة المسار
+  }, 500);
+}
+</script>
+
+<script type="module">
+  // الكود الحالي module هنا
+</script>
+  
+
+</body>
+</html>

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة Artikar - التداول بالذكاء الاصطناعي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+    <style>
+        :root {
+            --primary-color: #6e48aa;
+            --secondary-color: #9d50bb;
+            --accent-color: #4C2D90;
+            --light-color: #D1D1D1;
+            --dark-color: #2C3E50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.8;
+            scroll-behavior: smooth;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(110, 72, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.5;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo span {
+            color: white;
+            background: var(--accent-color);
+            padding: 0 10px;
+            border-radius: 8px;
+            display: inline-block;
+            transform: rotate(-5deg);
+            margin-right: 5px;
+            box-shadow: 0 4px 15px rgba(71, 118, 230, 0.4);
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .nav-tab {
+            padding: 15px 30px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 700;
+            border: none;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        
+        .nav-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-tab:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.6s ease forwards;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 10px;
+            background: var(--gradient);
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1, h2, h3 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            text-align: center;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 20px;
+            margin-top: 20px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 5px;
+            background: var(--gradient);
+            border-radius: 5px;
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            border-right: 5px solid var(--primary-color);
+            padding-right: 20px;
+            margin: 40px 0 25px;
+            position: relative;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--gradient);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 35px 0 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 50%;
+            height: 3px;
+            background: var(--gradient);
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #4b5563;
+        }
+        
+        ul, ol {
+            margin-bottom: 30px;
+            padding-right: 25px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-right: 35px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0;
+            top: 3px;
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+        
+        strong {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        
+        /* تصميم جديد لعرض الصور مع الحفاظ على النسب */
+        .responsive-image-container {
+            width: 100%;
+            margin: 40px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+            background: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .responsive-image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .responsive-image {
+            max-width: 100%;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+        
+        .responsive-image-container:hover .responsive-image {
+            transform: scale(1.03);
+        }
+        
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .gallery-item {
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+            background: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-item img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            transition: transform 0.8s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            margin: 50px 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            box-shadow: none;
+            background: white;
+        }
+        
+        table, th, td {
+            border: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: var(--gradient);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        td {
+            padding: 15px;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        tr:hover {
+            background-color: rgba(110, 72, 170, 0.05);
+        }
+        
+        .vip-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-right: 10px;
+            background: var(--gradient);
+            color: white;
+            transform: rotate(-2deg);
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.3);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--accent-color);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .feature-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+        }
+        
+        .feature-card p {
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+        
+        .cta-section {
+            background: var(--gradient);
+            color: white;
+            padding: 60px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.5;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-text {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
+            color: var(--accent-color);
+        }
+        
+        .cta-button:hover::before {
+            transform: translateX(100%);
+        }
+        
+        footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--gradient);
+        }
+        
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-logo span {
+            color: white;
+            background: var(--accent-color);
+            padding: 0 10px;
+            border-radius: 8px;
+            display: inline-block;
+            transform: rotate(-5deg);
+            margin-right: 5px;
+        }
+        
+        .footer-tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .social-links {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin: 0 10px;
+            color: white;
+            font-size: 1.3rem;
+            transition: all 0.4s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary-color);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(110, 72, 170, 0.3);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            margin-top: 30px;
+        }
+        
+        /* تأثيرات إضافية */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(110, 72, 170, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(110, 72, 170, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(110, 72, 170, 0); }
+        }
+        
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 100%;
+                padding: 0 30px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .features-grid, .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tab {
+                padding: 12px 20px;
+                margin: 5px;
+                font-size: 0.95rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            h3 {
+                font-size: 1.5rem;
+            }
+            
+            .page {
+                padding: 30px;
+            }
+            
+            .cta-section {
+                padding: 40px;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-button {
+                padding: 15px 40px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                max-width: 300px;
+                margin: 5px 0;
+            }
+            
+            .features-grid, .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-section {
+                padding: 30px 20px;
+            }
+            
+            .cta-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Artik<span>ar</span></div>
+            <div class="tagline">التداول الذكي بالذكاء الاصطناعي - مستقبل الاستثمار</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-page="intro">مقدمة</button>
+            <button class="nav-tab" data-page="why">لماذا Artikar؟</button>
+            <button class="nav-tab" data-page="strategies">استراتيجيات التداول</button>
+            <button class="nav-tab" data-page="vip">باقات VIP</button>
+            <button class="nav-tab" data-page="licenses">التراخيص</button>
+            <button class="nav-tab" data-page="arabic">في العالم العربي</button>
+        </div>
+        
+        <!-- الصفحة الأولى: مقدمة -->
+        <div class="page active" id="intro">
+            <h1>شركة Artikar للتداول بالذكاء الاصطناعي</h1>
+            <h2>مقدمة عن الشركة</h2>
+            <p>تأسست شركة <strong>Artikar</strong> عام 2018 كمنصة رائدة في مجال التداول الآلي باستخدام تقنيات الذكاء الاصطناعي المتطورة. ومنذ ذلك الحين، استطاعت الشركة أن تثبت مكانتها كواحدة من أبرز المنصات في العالم العربي والعالمي.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">ذكاء اصطناعي متقدم</h3>
+                    <p>نظامنا يعتمد على خوارزميات تعلم عميق تحلل أكثر من 10,000 نقطة بيانات في الثانية</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">أمان وحماية</h3>
+                    <p>نظام تشفير متقدم لحماية بياناتك واستثماراتك وفق أعلى المعايير العالمية</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">عوائد مضمونة</h3>
+                    <p>نسبة نجاح تصل إلى 92% في صفقات التداول بفضل تحليلاتنا الدقيقة</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الصفحة الثانية: لماذا Artikar؟ -->
+        <div class="page" id="why">
+            <h1>لماذا تختار Artikar؟</h1>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">تداول آلي بالذكاء الاصطناعي</h3>
+                    <p>تقنية متطورة تحلل السوق وتتخذ القرارات بسرعة تفوق الأداء البشري بأكثر من 1000 مرة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3 class="feature-title">عوائد يومية مضمونة</h3>
+                    <p>نظام VIP متدرج يقدم أرباحًا تتراوح بين 0.9 دولار إلى 4,080 دولار يوميًا</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3 class="feature-title">تراخيص عالمية</h3>
+                    <p>مرخصة من هيئات رقابية في الولايات المتحدة وأوروبا، مما يضمن الشفافية والأمان</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">دعم عربي مخصص</h3>
+                    <p>فريق دعم فني متاح على مدار الساعة لمساعدة المستثمرين الناطقين بالعربية</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="feature-title">حلول مبتكرة</h3>
+                    <p>أدوات تداول متقدمة وتقارير تحليلية مفصلة لمساعدتك في اتخاذ القرارات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">تعليم وتدريب</h3>
+                    <p>ندوات تدريبية مجانية ودورات متخصصة لرفع مهاراتك في التداول</p>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2 class="cta-title">ابدأ رحلتك الاستثمارية مع Artikar اليوم</h2>
+                <p class="cta-text">انضم إلى آلاف المستثمرين الذين يحققون أرباحًا يومية بفضل منصتنا الذكية</p>
+                <a href="#" class="cta-button pulse">سجل الآن مجانًا</a>
+            </div>
+        </div>
+        
+        <!-- الصفحة الثالثة: استراتيجيات التداول -->
+        <div class="page" id="strategies">
+            <h1>استراتيجيات التداول في Artikar</h1>
+            <p>تعتمد <strong>Artikar</strong> على عدة استراتيجيات تداول متطورة، تم تطويرها بواسطة خبراء التداول ومهندسي الذكاء الاصطناعي لدينا:</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3 class="feature-title">التداول اليومي <span class="vip-badge">Day Trading</span></h3>
+                    <ul>
+                        <li>صفقات تُفتح وتُغلق خلال اليوم الواحد</li>
+                        <li>تجنب مخاطر التقلبات الليلية</li>
+                        <li>عوائد سريعة حسب باقة VIP المختارة</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h3 class="feature-title">تداول التارجح <span class="vip-badge">Swing Trading</span></h3>
+                    <ul>
+                        <li>صفقات تمتد من أيام إلى أسابيع</li>
+                        <li>استغلال الاتجاهات المتوسطة المدى</li>
+                        <li>أرباح أعلى من التداول اليومي</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">تداول الزخم <span class="vip-badge">Momentum Trading</span></h3>
+                    <ul>
+                        <li>الشراء عند صعود السهم والبيع عند الذروة</li>
+                        <li>تحقيق أرباح سريعة في فترات الصعود القوي</li>
+                        <li>أفضل للأسهم ذات السيولة العالية</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="feature-title">تداول الأسهم <span class="vip-badge">Stock Trading</span></h3>
+                    <ul>
+                        <li>التركيز على أسهم الشركات الكبرى</li>
+                        <li>استثمار طويل أو قصير المدى</li>
+                        <li>تحليل أساسي وفني متكامل</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>كيف يعمل نظامنا؟</h2>
+            <p>يستخدم نظام Artikar خوارزميات الذكاء الاصطناعي لتحليل:</p>
+            <ul>
+                <li>البيانات التاريخية للسوق</li>
+                <li>أنماط الأسعار والحجم</li>
+                <li>الأخبار والتحليلات المالية</li>
+                <li>مؤشرات السوق العالمية</li>
+                <li>السياسات الاقتصادية</li>
+            </ul>
+        </div>
+        
+        <!-- الصفحة الرابعة: باقات VIP -->
+        <div class="page" id="vip">
+            <h1>باقات الاستثمار VIP في Artikar</h1>
+            <p>اختر الباقة التي تناسبك واستمتع بعوائد يومية مضمونة:</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المستوى</th>
+                            <th>السعر (USD)</th>
+                            <th>الدخل اليومي (USD)</th>
+                            <th>المميزات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VIP1</td>
+                            <td>10 - 20</td>
+                            <td>0.9 - 2.0</td>
+                            <td>وصول أساسي + تقارير يومية</td>
+                        </tr>
+                        <tr>
+                            <td>VIP2</td>
+                            <td>50 - 100</td>
+                            <td>2.5 - 5.8</td>
+                            <td>ميزات VIP1 + دعم فني أسرع</td>
+                        </tr>
+                        <tr>
+                            <td>VIP3</td>
+                            <td>300 - 600</td>
+                            <td>15.6 - 36</td>
+                            <td>ميزات VIP2 + إشارات تداول حصرية</td>
+                        </tr>
+                        <tr>
+                            <td>VIP4</td>
+                            <td>1000 - 2000</td>
+                            <td>54 - 124</td>
+                            <td>ميزات VIP3 + ندوات أسبوعية</td>
+                        </tr>
+                        <tr>
+                            <td>VIP5</td>
+                            <td>3000 - 6000</td>
+                            <td>168 - 384</td>
+                            <td>ميزات VIP4 + استراتيجيات متقدمة</td>
+                        </tr>
+                        <tr>
+                            <td>VIP6</td>
+                            <td>10K - 20K</td>
+                            <td>580 - 1,320</td>
+                            <td>ميزات VIP5 + مدير استثمار شخصي</td>
+                        </tr>
+                        <tr>
+                            <td>VIP7</td>
+                            <td>30K - 60K</td>
+                            <td>1,800 - 4,080</td>
+                            <td>جميع الميزات + اجتماعات شهرية مع الخبراء</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2>مميزات نظام VIP</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3 class="feature-title">سحب يومي للأرباح</h3>
+                    <p>يمكنك سحب أرباحك يوميًا بدون أي قيود أو تعقيدات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">دعم مباشر من خبراء</h3>
+                    <p>فريق دعم متخصص متاح على مدار الساعة لمساعدتك</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="feature-title">تقارير أداء مفصلة</h3>
+                    <p>تحليلات يومية وأسبوعية وشهرية لأداء استثمارك</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-level-up-alt"></i>
+                    </div>
+                    <h3 class="feature-title">إمكانية الترقية</h3>
+                    <p>يمكنك الترقية لمستويات أعلى في أي وقت لزيادة أرباحك</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الصفحة الخامسة: التراخيص -->
+        <div class="page" id="licenses">
+            <h1>الضمانات والتراخيص</h1>
+            <p>نفخر في Artikar بالشفافية والالتزام بأعلى المعايير التنظيمية العالمية:</p>
+            
+            <!-- عرض الصورة الأولى مع الحفاظ على النسب -->
+            <div class="responsive-image-container">
+                <img src="https.png" alt="ترخيص SEC الأمريكي" class="responsive-image">
+                <div class="image-caption">ترخيص SEC الأمريكي</div>
+            </div>
+            
+            <!-- عرض الصورة الثانية مع الحفاظ على النسب -->
+            <div class="responsive-image-container">
+                <img src="https12.png" alt="ترخيص MiFID الأوروبي" class="responsive-image">
+                <div class="image-caption">شهادة تسجيل تذكارية لدائرة الإيرادات الداخلية (IRS)</div>
+            </div>
+            
+            <!-- عرض الصورة الثالثة مع الحفاظ على النسب -->
+            <div class="responsive-image-container">
+                <img src="https13.png" alt="ترخيص DFSA الإماراتي" class="responsive-image">
+                <div class="image-caption">ترخيص البنك المركزي اليمني </div>
+            </div>
+            
+            <h2>لماذا تهمنا التراخيص؟</h2>
+            <ul>
+                <li>ضمان شفافية العمليات المالية</li>
+                <li>حماية حقوق المستثمرين</li>
+                <li>التزام بالقوانين واللوائح الدولية</li>
+                <li>مراجعات دورية من الجهات الرقابية</li>
+                <li>ضمان استقرار المنصة وأمانها</li>
+            </ul>
+            
+            <div class="cta-section">
+                <h2 class="cta-title">استثمر مع منصة مرخصة وآمنة</h2>
+                <p class="cta-text">انضم إلى Artikar اليوم وكن جزءًا من مجتمع المستثمرين الأذكياء</p>
+                <a href="#" class="cta-button pulse">ابدأ الآن</a>
+            </div>
+        </div>
+        
+        <!-- الصفحة السادسة: في العالم العربي -->
+        <div class="page" id="arabic">
+            <h1>Artikar في العالم العربي</h1>
+            <p>نفخر بأننا المنصة الرائدة في التداول الآلي بالذكاء الاصطناعي في المنطقة العربية:</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="feature-title">الريادة في المنطقة</h3>
+                    <p>أول منصة تداول بالذكاء الاصطناعي مخصصة للمستثمر العربي</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="feature-title">شراكات استراتيجية</h3>
+                    <p>تعاون مع بنوك وشركات استثمار عربية رائدة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="feature-title">ندوات تدريبية</h3>
+                    <p>ندوات مجانية باللغة العربية لرفع الوعي الاستثماري</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="feature-title">واجهة عربية كاملة</h3>
+                    <p>منصة سهلة الاستخدام مصممة خصيصًا للمستثمر العربي</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">مجتمع مستثمرين</h3>
+                    <p>أكبر مجتمع عربي للمتداولين بالذكاء الاصطناعي</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="feature-title">تحديثات مستمرة</h3>
+                    <p>مواكبة أحدث التطورات في الأسواق المالية العربية</p>
+                </div>
+            </div>
+            
+            <h2>خاتمة</h2>
+            <p><strong>Artikar</strong> ليست مجرد منصة تداول، بل <strong>نظام مالي ذكي</strong> مصمم لتحقيق <strong>أعلى العوائد بأقل المخاطر</strong>. سواء كنت مبتدئًا أو محترفًا، فإن <strong>باقات VIP</strong> توفر لك خطة استثمارية تناسب ميزانيتك وأهدافك.</p>
+            
+            <blockquote style="background: #f8fafc; border-right: 5px solid var(--primary-color); padding: 30px; margin: 40px 0; font-style: italic; font-size: 1.3rem; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);">
+                <strong>"استثمر بذكاء.. دع الذكاء الاصطناعي يعمل لك!"</strong> 🚀
+            </blockquote>
+            
+            <p style="text-align: center; font-size: 1.2rem; margin: 40px 0;"><strong>لمزيد من المعلومات، تفضل بزيارة موقع Artikar الرسمي أو اتصل بخدمة العملاء.</strong></p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Artik<span>ar</span></div>
+            <div class="footer-tagline">مستقبل التداول بالذكاء الاصطناعي</div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 Artikar. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // تنقل بين الصفحات
+        document.addEventListener('DOMContentLoaded', function() {
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const pages = document.querySelectorAll('.page');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // إزالة الفعالية من جميع الأزرار
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // إضافة الفعالية للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع الصفحات
+                    pages.forEach(page => page.classList.remove('active'));
+                    
+                    // إظهار الصفحة المحددة
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(pageId).classList.add('active');
+                    
+                    // التمرير السلس إلى أعلى الصفحة
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // تأثيرات عند التمرير
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.feature-card, .responsive-image-container, .gallery-item');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // تهيئة العناصر قبل الظهور
+            document.querySelectorAll('.feature-card, .responsive-image-container, .gallery-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+            });
+            
+            // تشغيل التأثير عند التحميل وعند التمرير
+            window.addEventListener('load', animateOnScroll);
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>

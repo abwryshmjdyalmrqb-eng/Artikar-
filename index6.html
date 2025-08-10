@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة Artiker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+ <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6e48aa">
+
+<body>
+
+<!-- ✅ شريط متحرك من اليمين إلى اليسار -->
+<div style="background: #6a1b9a; color: white; padding: 15px; border-radius: 15px; margin: 20px; text-align: center;">
+  <marquee behavior="scroll" direction="right" scrollamount="4">
+    مرحبا بك في منصة Artiker للتداول - فرص ذهبية كل يوم!
+  </marquee>
+</div>
+
+<!-- ✅ عرض الصور المتغيرة -->
+<div style="width: 90%; max-width: 500px; margin: auto; overflow: hidden; border-radius: 20px; background: #ccc;">
+  <img id="slider-img" src="img1.jpg" style="width: 100%; height: 200px; object-fit: cover;" />
+</div>
+
+<!-- ✅ شبكة الأزرار 3x3 وواحد تحت -->
+<div style="background: #eee; padding: 25px; border-radius: 25px; margin: 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+
+<button onclick="location.href='index7.html'" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-chart-line"></i><br> التداول اليومي
+</button>
+
+<button onclick="showMaintenance()" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-wave-square"></i><br> تداول التارجح
+</button>
+
+<button onclick="showMomentumAlert()" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-bolt"></i><br> تداول الزخم
+</button>
+
+<button onclick="showStocksAlert()" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-building-columns"></i><br> تداول الأسهم
+</button>
+
+<button onclick="location.href='index15.html'" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-user-plus"></i><br> دعوة أصدقاء
+</button>
+
+<button onclick="window.location.href='index12.html'" style="background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+  <i class="fas fa-building"></i><br> ملف الشركة
+</button>
+
+<!-- الزر الأخير -->
+<div style="grid-column: span 3;">
+  <button onclick="location.href='index14.html'" style="width: 100%; background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 15px;">
+    <i class="fas fa-headset"></i> خدمة العملاء
+  </button>
+</div>
+  </div>
+
+</div>
+
+</body>
+</html>
