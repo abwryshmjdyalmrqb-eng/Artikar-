@@ -1,0 +1,21 @@
+{
+  "name": "وتساب السديم  PRO",
+  "short_name": "وتساب PRO",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#9D50BB",
+  "theme_color": "#9D50BB",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
